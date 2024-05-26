@@ -23,26 +23,39 @@ async def get_data(UserID:int):
             return {"message":data}
     else:
         return {"message": "Invalid data"}
-    
 
 
-@app.post("/postData")
+
+
+@app.post("/signUp")
 async def post_data(data: dict):
     name = data.get("name")
     UserName = data.get("UserName")
     Password = data.get("Password")
-    insert_data_into_table(name, UserName, Password)
-    return {"message": "Data inserted successfully"}
+    getUser = CheckUserNamme(UserName)
+    if  getUser:
+        return {"message":"User Alreay Exist"}
+    else: 
+        get_message = insert_data_into_table(name, UserName, Password)
+        if get_message:
+            return {"message": "Data inserted successfully"}
+        else:
+            return {"message": "Data not inserted successfully"}
+
+
+
 
 @app.post("/login")
 async def post_data(data: dict):
     UserName = data.get("UserName")
     Password = data.get("Password")
-    message = login(UserName, Password)
-    if message:
-            return {"message": "Login successful"}
+    formatted_data = login(UserName, Password)
+    if formatted_data:
+         return {"Login_SuccessFully": formatted_data}
+            
+            
     else:
-        return {"message": "Invalid username or password"}
+        return {"Login_SuccessFully": "Invalid username or password"}
     
 
 
